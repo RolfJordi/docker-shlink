@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  server:
+    image: shlinkio/shlink
+    depends_on:
+      - db
+    networks:
+      - lan
+      - wan
+    environment:
+      SHORT_DOMAIN_HOST: "w.max.local"
+      SHORT_DOMAIN_SCHEMA: "http"
+      NOT_FOUND_REDIRECT_TO: "https://www.canel.ch"
+      DB_DRIVER: "mysql"
+      DB_HOST: "db"
+      DB_NAME: "shlink"
+      DB_USER: "user"
+      DB_PASSWORD: "dbpass"
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.frontend.rule=Host:w.max.local'
+      - 'traefik.port=8080'
+      - 'traefik.docker.network=wan'
+
+  db:
+    image: mariadb
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - lan
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpass"
+      MYSQL_DATABASE: "shlink"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "dbpass"
+
+  webui:
+    image: shlinkio/shlink-web-client
+    depends_on:
+      - server
+    networks:
+      - lan
+    ports:
+      - "8088:80"
+
+networks:
+  lan: 
+  wan:
+    name: traefik_wan
+    external: True

@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  shlink:
+    image: shlinkio/shlink
+    container_name: "shlink"
+    ports:
+      - "80:8080"
+    environment:
+      SHORT_DOMAIN_HOST: "w.max.local"
+      SHORT_DOMAIN_SCHEMA: "http"
+      NOT_FOUND_REDIRECT_TO: "https://www.canel.ch"

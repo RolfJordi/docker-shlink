@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+  server:
+    image: shlinkio/shlink
+    depends_on:
+      - db
+    ports:
+      - "80:8080"
+    environment:
+      SHORT_DOMAIN_HOST: "w.max.local"
+      SHORT_DOMAIN_SCHEMA: "http"
+      NOT_FOUND_REDIRECT_TO: "https://www.canel.ch"
+      DB_DRIVER: "mysql"
+      DB_HOST: "db"
+      DB_NAME: "shlink"
+      DB_USER: "user"
+      DB_PASSWORD: "dbpass"
+
+  db:
+    image: mariadb
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpass"
+      MYSQL_DATABASE: "shlink"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "dbpass"
+
+  webui:
+    image: shlinkio/shlink-web-client
+    depends_on:
+      - server
+    ports:
+      - "8088:80"
