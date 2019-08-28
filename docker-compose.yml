@@ -9,13 +9,14 @@ services:
       - wan
     environment:
       SHORT_DOMAIN_HOST: "w.max.local"
-      SHORT_DOMAIN_SCHEMA: "http"
+      SHORT_DOMAIN_SCHEMA: "https"
       NOT_FOUND_REDIRECT_TO: "https://www.canel.ch"
       DB_DRIVER: "mysql"
       DB_HOST: "db"
       DB_NAME: "shlink"
       DB_USER: "user"
       DB_PASSWORD: "dbpass"
+      VALIDATE_URLS: "false"
     labels:
       - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:w.max.local'
@@ -40,8 +41,12 @@ services:
       - server
     networks:
       - lan
-    ports:
-      - "8088:80"
+      - wan
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.frontend.rule=Host:shlink.max.local'
+      - 'traefik.port=80'
+      - 'traefik.docker.network=wan'
 
 networks:
   lan: 
