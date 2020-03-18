@@ -11,7 +11,7 @@ services:
       SHORT_DOMAIN_HOST: "w.max.local"
       SHORT_DOMAIN_SCHEMA: "https"
       NOT_FOUND_REDIRECT_TO: "https://www.canel.ch"
-      DB_DRIVER: "mysql"
+      DB_DRIVER: "postgres"
       DB_HOST: "db"
       DB_NAME: "shlink"
       DB_USER: "user"
@@ -24,16 +24,19 @@ services:
       - 'traefik.docker.network=wan'
 
   db:
-    image: mariadb
-    volumes:
-      - db:/var/lib/mysql
+    image: postgres:11
+    restart: always
     networks:
       - lan
+    ports:
+      - 5432:5432  
     environment:
-      MYSQL_ROOT_PASSWORD: "rootpass"
-      MYSQL_DATABASE: "shlink"
-      MYSQL_USER: "user"
-      MYSQL_PASSWORD: "dbpass"
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_USER: user
+      POSTGRES_DB: shlink
+    volumes:
+      - db:/var/lib/postgresql/data
+
 
   webui:
     image: shlinkio/shlink-web-client
