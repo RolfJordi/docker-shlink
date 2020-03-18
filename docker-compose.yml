@@ -8,8 +8,8 @@ services:
       - lan
       - wan
     environment:
-      SHORT_DOMAIN_HOST: "w.max.local"
-      SHORT_DOMAIN_SCHEMA: "https"
+      SHORT_DOMAIN_HOST: "localhost"
+      SHORT_DOMAIN_SCHEMA: "http"
       NOT_FOUND_REDIRECT_TO: "https://www.canel.ch"
       DB_DRIVER: "postgres"
       DB_HOST: "db"
@@ -17,6 +17,8 @@ services:
       DB_USER: "user"
       DB_PASSWORD: "dbpass"
       VALIDATE_URLS: "false"
+    ports:
+      - 8080:8080
     labels:
       - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:w.max.local'
@@ -29,7 +31,7 @@ services:
     networks:
       - lan
     ports:
-      - 5432:5432  
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: dbpass
       POSTGRES_USER: user
@@ -45,6 +47,8 @@ services:
     networks:
       - lan
       - wan
+    ports:
+      - 9080:80
     labels:
       - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:shlink.max.local'
@@ -54,8 +58,6 @@ services:
 networks:
   lan: 
   wan:
-    name: traefik_wan
-    external: True
 
 volumes:
   db:
