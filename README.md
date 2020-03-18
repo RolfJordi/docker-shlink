@@ -6,3 +6,5 @@
 ## TODO
  * [] generate api key
  * [] config the webclient with the api key
+ * [] test in traefik
+
